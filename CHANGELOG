@@ -1,0 +1,275 @@
+2015-04-01  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus_handler.erl (handler_cross_domains): use leptus_utils:get_uri_authority/1
+	  to parse 'Origin' header value
+
+	* src/leptus_utils.erl: add get_uri_authority/1
+
+	* src/leptus.erl (print_info/2): fix started listener information
+
+2014-08-30  Sina Samavati  <sina.samv@gmail.com>
+
+	* Makefile: avoid overriding DEPS_DIR. fix moving deps/*/deps/* to deps/
+
+2014-08-05  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus.erl (start_listener/3): keep used options in an ETS table
+	(upgrade/3): add function upgrade/3 to use options when upgrading a listener
+
+2014-07-14  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus_logger.erl (delete_handler/2): fix type spec
+
+2014-07-13  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus_logger.erl: fix type spec of add_handler/2 & add delete_handler/2
+
+2014-07-04  Sina Samavati  <sina.samv@gmail.com>
+
+	* test/leptus_handler_SUITE.erl: add tests for three internal functions of leptus_handler
+
+2014-07-03  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus.erl: add function specifications for ensure_started/1,
+	  ensure_deps_started/0, opt/3, print_info/2, update_listener_bucket/1
+
+2014-06-29  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus_access_log.erl (handle_call/2): fix return error
+
+	* src/leptus_handler.erl: fix a type error
+
+2014-06-28  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus_logger.erl (timezone): re-fix timezone calculation
+
+2014-06-27  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus_logger.erl (timezone): fix timezone calculation
+
+2014-06-22  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus_access_log.erl: add open_file/1 & millsec_til_tomorrow/0.
+	  add a timer for asking for a new file once a day
+
+2014-06-17  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus_handler.erl: spawn processes for doing the access & console log
+
+	* src/leptus_sup.erl (init/1): add logger event manager in the supervisor tree
+
+2014-06-15  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus_access_log.erl: update the event handler to make log format customizable
+
+	* src/leptus.erl (start_listener/3): add the option 'log_handlers' to specify log event handlers
+	  and add them to the event manager before starting the listener
+
+2014-06-11  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus_access_log.erl: add access log event handler
+
+	* src/leptus_req.erl: add peer/1 and header/3
+
+	* src/leptus_logger.erl (datetime/1): update it to return 2 digits for hour, minute and second
+
+	* Makefile: update ERLC_OPTS and the target 'deps' to keep tarballs
+
+	* test/leptus_logger_SUITE.erl: add tests for the leptus_logger module
+
+	* include/leptus_logger.hrl: add the record 'log_data' and the macro 'LOGGER'
+
+	* src/leptus_logger.erl: add the module for adding logging handlers to the system
+	  and providing a simple log formatter
+
+2014-06-05  Sina Samavati  <sina.samv@gmail.com>
+
+	* 0.4.2 - src/leptus_handler.erl: use leptus_req:header/2 correctly (fix handling CORS)
+
+2014-05-28  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus.erl: remove inet_ip_to_str/1 and use inet:ntoa/1 instead
+	(print_info/2): use inet_parse:ntoa/1. R15 doesn't come with inet:ntoa/1
+
+	* src/leptus_handler.erl: rename reply/3 and reply/5 to handle_response
+
+2014-05-27  Sina Samavati  <sina.samv@gmail.com>
+
+	* 0.4.1: update leptus_req:header/2,parse_header/2 to return 'undefined' if nothing found
+	fix the broken sync call to return errors if there's any
+
+2014-05-25  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus_handler.erl: add badmatch_error_info/5 & error_info/5
+	  to display error messages with more details
+
+2014-05-24  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus_handler.erl: call every callback in try...catch expression
+	  to catch errors and show error messages when needed
+	remove content_length/1. use iolist_size/1 to get the content-length
+	add status_color/1 & console_log/4. colorize console log
+
+2014-05-23  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus_req.erl: add reply/4
+
+	* src/leptus_hooks.erl: remove the module since it's no longer used
+
+	* src/leptus.erl (start_listener/3): remove onresponse hook
+
+	* src/leptus_handler.erl: remove handle/2, terminate/3
+	turn the module into a cowboy protocol
+	(upgrade/4): log request details by sending information event
+
+2014-05-18  Sina Samavati  <sina.samv@gmail.com>
+
+	* 0.4.0: add leptus:start_listener/2,3 leptus:stop_listener/1
+	add http status code bindings
+	add Handler:cross_domains/3 to handle cross-domain requests
+	fix broken specs
+	change leptus_req module api - requires a pid as the first argument in every function
+	provide Handler:prefix/0 for prefixing routes
+	improve leptus_router:sort_dispatch/1
+	add '{html, Body}' response type
+	change the terminate/3 callback to terminate/4
+	add leptus:upgrade/0,1,2 to upgrade running listener(s)
+	add leptus:running_listeners/0 to get a list of running listeners
+	add leptus_utils module which provides a number of utilities
+	add leptus:listener_uptime/1 to get uptime of a running listener
+	improve leptus_json to work with both jsx and jiffy
+	add leptus_router:static_file_routes/1 to make routes for serving static files
+	provide 'static_dir' option when starting a listener
+	update leptus_pt module to avoid using the process dictionary
+	provide optional callback Module:has_permission/3 for handling permissions
+	rename is_authorized callback to is_authenticated
+	add terminate reasons to be used in the terminate/4 callbacks
+	update documentations
+
+2014-02-11  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus_router.erl: add lt/2, egt/2, segments_length/2 and path_rule/0 type
+	improve sort_path_rules/1
+
+2014-02-08  Sina Samavati  <sina.samv@gmail.com>
+
+	* 0.3.4: fix the order of routes issue -- order them the way it matters in cowboy
+
+	* src/leptus.erl (start_listener/3): use leptus_router:sort_dispatch/1 to sort routes
+
+	* src/leptus_router.erl: add sort_dispatch/1, sort_dispatch/2, sort_path_rules/1 and
+	sort_path_rules/4 to order routes the way it matters in cowboy
+
+2014-02-06  Sina Samavati  <sina.samv@gmail.com>
+
+	* 0.3.3: update cowboy to 0.9.0
+
+2014-01-09  Sina Samavati  <sina.samv@gmail.com>
+
+	* 0.3.2: fix another dependency conflict in rebar.config.script
+	update documents
+
+2013-12-28  Sina Samavati  <sina.samv@gmail.com>
+
+	* 0.3.1: fix dependency conflict in rebar.config.script
+
+2013-12-23  Sina Samavati  <sina.samv@gmail.com>
+
+	* 0.3.0: add the facility to respond in messagepack
+	harness cowboy's ssl and spdy capabilities
+	add leptus_config to keep settings in memory, improve the code upgrade functionality
+	a number of bugs have been fixed
+	add the ability to change HostMatch
+	change the api for starting a listener to start_http/1 start_https/1 start_spdy/1,
+	that require the Options argument or app name to read priv/leptus.config file from
+
+	* src/leptus.erl: remove start_http/2, start_https/2 start_spdy/2
+	add start_http/1, start_https/1, start_spdy/1 that requires options or app name,
+	if app name would be specified, leptus will look at app_name/priv/leptus.config to read options
+
+2013-12-20  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus_config.erl: change port_num/0 ip_addr/0 to port_num/1 ip_addr/1 to find value by section
+
+	* src/leptus.erl: remove start_http/0 since it was unreliable
+	update start_http/2 that now takes two arguments, Handlers and Options
+	add start_https/0,1 start_spdy/0,1 stop_https/0 stop_spdy/0 to handle starting/stopping https and spdy
+
+	* src/leptus_config.erl: export config_file/2
+	avoide initializing configuration based on setting priv_dir
+
+2013-12-16  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus_req.erl (auth/2): change it to get the atom 'basic' as the first argument
+
+2013-12-09  Sina Samavati  <sina.samv@gmail.com>
+
+	* 0.2.2: type specifications improvement
+	add leptus:start_http/2
+
+	* src/leptus.erl: add start_http/2 that requires handlers() and cowboy_protocol:opts()
+
+2013-12-08  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus_handler.erl: improve specs
+
+	* src/leptus_req.erl: improve specs
+
+2013-12-07  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus_req.erl: fix specs
+
+	* include/leptus.hrl: include cowboy_req:req()
+
+2013-12-05  Sina Samavati  <sina.samv@gmail.com>
+
+	* 0.2.0: fix application behaviour,
+	add leptus_json bridge to work with either jiffy or jsx
+
+	* src/leptus_handler.erl (init/3): change handler_init/4 call since {ok, State} only works at the moment
+
+	* src/leptus_router.erl (handle_routes/2): fix spec
+
+2013-12-04  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus.erl: change http ref name to leptus_http
+	start leptus top-level supervisor
+
+	* src/leptus_app.erl (start/2): no longer calls leptus:start_http/0,
+	only starts the top-level supervisor
+
+2013-12-03  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus_req.erl: add invoke/2 for calling cowboy_req:F(A) and getting the value using get_value/1
+
+	* src/leptus_handler.erl: change http_method/1 to return method() | badarg,
+	change handle_request/5 to call method_not_allowed/3 when getting badarg from http_method/1
+
+2013-12-02  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus_handler.erl: add content_type/1,
+	change set_content_type/2 to use content_type/1 to avoide repeating a thing
+
+2013-12-01  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus_handler.erl: add set_content_type/2
+	change Body spec, now it should be binary() | string() | {json, json_term()}
+	fix Headers issue, no longer needs to be invoked as 'json' when replying in JSON
+
+2013-11-29  Sina Samavati  <sina.samv@gmail.com>
+
+	* src/leptus.erl (start_http/1): avoid starting 'reloader'
+
+	* 0.1.1: fix parse transformation issue,
+	add ./scripts/routes to display handlers, routes and allowed methods in terminal
+	make code upgrade functionality work with minimal effort,
+	not allowed methods minor change (internal),
+	leptus_req.erl: change binding/2 to param/2 and bindings/1 to params/1.
+
+2013-11-27  Sina Samavati  <sina.samv@gmail.com>
+
+	* Change Module:allowed_methods/1 to return a bitstring of HTTP methods
+	e.g. <<"GET, PUT">>
+
+	* Add reloader.erl
+	code upgrade functionality now works by re-compiling modules (reloader must be started).

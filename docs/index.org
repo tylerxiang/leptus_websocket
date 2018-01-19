@@ -1,0 +1,109 @@
+#+TITLE:    Leptus documentation
+#+AUTHOR:   Sina Samavati
+#+EMAIL:    sina.samv@gmail.com
+#+OPTIONS:  ^:nil toc:nil num:nil
+
+* Leptus documentation
+  :PROPERTIES:
+  :CUSTOM_ID: docs
+  :END:
+
+** Overview
+   :PROPERTIES:
+   :CUSTOM_ID: preface
+   :END:
+
+   #+BEGIN_SRC erlang
+   -module(hello).
+   -compile({parse_transform, leptus_pt}).
+
+   %% leptus callbacks
+   -export([init/3]).
+   -export([get/3]).
+   -export([terminate/4]).
+
+   init(_Route, _Req, State) ->
+       {ok, State}.
+
+   get("/", _Req, State) ->
+       {<<"Hello, leptus!">>, State};
+   get("/hi/:name", Req, State) ->
+       Status = ok,
+       Name = leptus_req:param(Req, name),
+       Body = [{<<"say">>, <<"Hi">>}, {<<"to">>, Name}],
+       {Status, {json, Body}, State}.
+
+   terminate(_Reason, _Route, _Req, _State) ->
+       ok.
+   #+END_SRC
+
+   Note the use of the following in your request/resource handler module.
+   #+BEGIN_SRC erlang
+   -compile({parse_transform, leptus_pt}).
+   #+END_SRC
+
+   Let's compile and run the example above.
+
+   #+BEGIN_SRC
+   $ erl -pa ebin deps/*/ebin
+   #+END_SRC
+
+   #+BEGIN_SRC
+   > c(hello).
+   > leptus:start_listener(http, [{'_', [{hello, undefined_state}]}]).
+   Leptus started on http://127.0.0.1:8080
+   #+END_SRC
+
+   #+BEGIN_SRC
+   $ curl localhost:8080/hi/Leptus
+   {"say":"Hi","to":"Leptus"}
+   #+END_SRC
+
+** Table of contents
+   :PROPERTIES:
+   :CUSTOM_ID: toc
+   :END:
+
+   - [[types.org][Types]]
+
+   - [[callbacks.org][Callbacks]]
+     - [[callbacks.org#prefix0][prefix/0]]
+     - [[callbacks.org#init3][init/3]]
+     - [[callbacks.org#cross_domains3][cross_domains/3]]
+     - [[callbacks.org#is_authenticated3][is_authenticated/3]]
+     - [[callbacks.org#has_permission3][has_permission/3]]
+     - [[callbacks.org#httpmethod3][HttpMethod/3]]
+     - [[callbacks.org#terminate4][terminate/4]]
+
+   - [[leptus_req.org][Request]]
+     - [[leptus_req.org#param2][param/2]]
+     - [[leptus_req.org#params1][params/1]]
+     - [[leptus_req.org#qs1][qs/1]]
+     - [[leptus_req.org#qs_val2][qs_val/2]]
+     - [[leptus_req.org#uri1][uri/1]]
+     - [[leptus_req.org#version1][version/1]]
+     - [[leptus_req.org#method1][method/1]]
+     - [[leptus_req.org#body1][body/1]]
+     - [[leptus_req.org#body_raw1][body_raw/1]]
+     - [[leptus_req.org#body_qs1][body_qs/1]]
+     - [[leptus_req.org#header2][header/2]]
+     - [[leptus_req.org#parse_header2][parse_header/2]]
+     - [[leptus_req.org#auth2][auth/2]]
+
+   - [[configuration.org][Configuration]]
+     - [[configuration.org#handlers][handlers]]
+     - [[configuration.org#options][options]]
+
+   - [[start.org][Start]]
+     - [[start.org#start_listener2][leptus:start_listener/2]]
+     - [[start.org#start_listener3][leptus:start_listener/3]]
+     - [[start.org#the-otp-way][The OTP way]]
+
+   - Modules
+     - [[leptus.org][leptus]]
+     - [[leptus_config.org][leptus_config]]
+     - [[leptus_json.org][leptus_json]]
+     - [[leptus_logger.org][leptus_logger]]
+     - [[leptus_req.org][leptus_req]]
+     - [[leptus_router.org][leptus_router]]
+     - [[leptus_utils.org][leptus_utils]]

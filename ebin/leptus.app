@@ -1,0 +1,11 @@
+{application,leptus,
+             [{description,"REST framework that runs on top of cowboy"},
+              {vsn,"0.4.2"},
+              {registered,[]},
+              {applications,[kernel,stdlib,cowboy]},
+              {mod,{leptus_app,[]}},
+              {env,[]},
+              {modules,[leptus,leptus_access_log,leptus_app,leptus_config,
+                        leptus_debug_log,leptus_handler,leptus_json,
+                        leptus_logger,leptus_pt,leptus_req,leptus_req_sup,
+                        leptus_router,leptus_sup,leptus_utils,reloader]}]}.
